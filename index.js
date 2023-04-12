@@ -10,6 +10,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Cliente se desconectou ' + socket.id)
     });
+
+    socket.on('msg', (data) => {
+        socket.emit('showmsg', data);
+    })
 });
 
 app.get('/', (req, res) => {

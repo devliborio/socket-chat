@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang='pt-BR'>
+
 <head>
     <meta charset='UTF-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Socket-Chat</title>
 </head>
+
 <body>
 
+    <h1>Socket Messenger</h1>
+
+    <div id='chat'>
+
+    </div><br>
+
+    <input type="text" name="" id="msg" placeholder="Digite sua mensagem"><br><br>
+    <input type="text" name="" id="username" placeholder="Seu nome de usuário"><br><br>
+    <button onclick="enviar()" type="submit">Enviar</button>
+
 </body>
+
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js'></script>
 <script>
     let socket = io('http://localhost:8000');
@@ -16,5 +29,24 @@
     socket.on('disconnect', () => {
         console.log("Cliente desconectado");
     })
+
+    socket.on('showmsg', (data) => {
+        let chat = document.getElementById('chat');
+        let p = document.createElement('p');
+        p.innerHTML = data.userName + ": " + data.msg
+        chat.append(p);
+    })
+
+    function enviar() {
+
+        let msgField = document.getElementById('msg');
+        let userNameField = document.getElementById('username');
+
+        let msg = msgField.value;
+        let userName = userNameField.value;
+
+        socket.emit('msg', { msg: msg, userName: userName });
+    }
 </script>
+
 </html>
